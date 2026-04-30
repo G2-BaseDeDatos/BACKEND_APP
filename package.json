@@ -1,0 +1,31 @@
+{
+  "name": "backend_app",
+  "version": "1.0.0",
+  "description": "Backend for Proyecto Base de Datos",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/G2-BaseDeDatos/BACKEND_APP.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/G2-BaseDeDatos/BACKEND_APP/issues"
+  },
+  "homepage": "https://github.com/G2-BaseDeDatos/BACKEND_APP#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "oracledb": "^6.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
