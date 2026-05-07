@@ -20,7 +20,7 @@ class ArticuloModel {
         FROM ARTICULOS a
         JOIN CATEGORIAS  c  ON a.ID_CAT = c.ID_CAT
         JOIN UBICACIONES u  ON a.ID_UBI = u.ID_UBI
-        JOIN USUARIOS    us ON a.ID_USU = us.ID_USU
+        LEFT JOIN USUARIOS    us ON a.ID_USU = us.ID_USU
         WHERE 1=1
       `;
       const binds = {};
@@ -71,7 +71,7 @@ class ArticuloModel {
          FROM ARTICULOS a
          JOIN CATEGORIAS  c  ON a.ID_CAT = c.ID_CAT
          JOIN UBICACIONES u  ON a.ID_UBI = u.ID_UBI
-         JOIN USUARIOS    us ON a.ID_USU = us.ID_USU
+         LEFT JOIN USUARIOS    us ON a.ID_USU = us.ID_USU
          WHERE a.ID_ART = :id`,
         { id },
         { outFormat: oracledb.OUT_FORMAT_OBJECT }
