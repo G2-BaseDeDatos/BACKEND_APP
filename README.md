@@ -8,145 +8,172 @@ Universidad Técnica de Ambato · Facultad de Ingeniería en Sistemas
 
 ## 📋 Tabla de Contenidos
 
-1. [Requisitos previos](#-requisitos-previos)
-2. [Configuración de Oracle XE](#-configuración-de-oracle-xe)
-3. [Instalación del proyecto](#-instalación-del-proyecto)
-4. [Variables de entorno](#-variables-de-entorno)
-5. [Ejecutar el servidor](#-ejecutar-el-servidor)
+1. [Herramientas a Instalar (Requisitos Previos)](#-herramientas-a-instalar-requisitos-previos)
+2. [Configuración de Oracle XE y Base de Datos](#-configuración-de-oracle-xe-y-base-de-datos)
+3. [Instalación del Proyecto Paso a Paso](#-instalación-del-proyecto-paso-a-paso)
+4. [Variables de Entorno (.env)](#-variables-de-entorno-env)
+5. [Ejecutar el Servidor](#-ejecutar-el-servidor)
 6. [Autenticación JWT](#-autenticación-jwt)
 7. [Endpoints de la API](#-endpoints-de-la-api)
 8. [Guía de pruebas en Postman](#-guía-de-pruebas-en-postman)
 
 ---
 
-## 📦 Requisitos previos
+## 📦 Herramientas a Instalar (Requisitos Previos)
 
-Instala las siguientes herramientas **en este orden**:
+Para que esta aplicación funcione correctamente en tu computadora, debes instalar **estrictamente en este orden** los siguientes programas. Asegúrate de reiniciar tu computadora tras instalar Oracle y configurar las variables de entorno.
 
-### 1. Node.js (v18 o superior)
-- Descarga: https://nodejs.org/
-- Verifica: `node -v` y `npm -v`
+### 1. Git (Control de versiones)
+Necesario para descargar el código del proyecto.
+- **Nombre de la herramienta:** Git for Windows
+- **Descarga:** https://git-scm.com/download/win
+- **Instalación:** Descarga el instalador de 64-bit, ejecútalo y dale a "Next" en todo dejando las opciones por defecto.
+- **Verificación:** Abre una terminal (CMD o PowerShell) y escribe `git -v`. Debería mostrar la versión de Git.
 
-### 2. Oracle Database XE
-- Descarga: https://www.oracle.com/database/technologies/xe-downloads.html
-- Instala y anota la contraseña de SYSTEM que configures.
-- El servicio debe llamarse `OracleServiceXE` y escuchar en el puerto `1521`.
+### 2. Node.js (Entorno de ejecución para el Backend)
+Necesario para correr el código JavaScript del servidor y descargar las dependencias.
+- **Nombre de la herramienta:** Node.js (Recomendamos la versión **20.x LTS**)
+- **Descarga:** https://nodejs.org/es/ (Selecciona el botón que dice "LTS")
+- **Instalación:** Ejecuta el archivo `.msi`, acepta los términos y dale a "Next" hasta finalizar.
+- **Verificación:** Abre una terminal nueva y escribe `node -v` (debería salir `v20...` o `v18...`) y luego `npm -v` (debería salir un número como `10...`).
 
-### 3. Oracle Instant Client 64-bit ⚠️ (obligatorio para Node.js)
+### 3. Oracle Database XE (El Motor de Base de Datos)
+Es el programa que guardará toda la información del sistema.
+- **Nombre de la herramienta:** Oracle Database 21c Express Edition (o versión 18c XE)
+- **Descarga:** https://www.oracle.com/database/technologies/xe-downloads.html
+- **Instalación:** 
+  1. Descarga el ZIP y extráelo.
+  2. Ejecuta el `setup.exe`.
+  3. **¡MUY IMPORTANTE!** Durante la instalación, te pedirá que ingreses una contraseña para los usuarios `SYS`, `SYSTEM` y `PDBADMIN`. **Anota esta contraseña y no la olvides**, la necesitarás más adelante.
+  4. Finaliza la instalación. El servicio por defecto se llamará `OracleServiceXE` y escuchará en el puerto `1521`.
 
-> Necesario porque `node-oracledb` requiere librerías nativas de 64 bits.
+### 4. Oracle Instant Client 64-bit ⚠️ (CRÍTICO PARA NODE.JS)
+Este paso es **obligatorio** para que el backend (`Node.js`) pueda comunicarse con `Oracle`.
+- **Nombre de la herramienta:** Oracle Instant Client - Basic Package
+- **Descarga:** [Enlace a descargas para Windows x64](https://www.oracle.com/database/technologies/instant-client/winx64-64-downloads.html)
+- **Pasos de Instalación y Configuración:**
+  1. Descarga el **Basic Package (ZIP)** para Windows x64.
+  2. Crea una carpeta en tu disco local C llamada `instantclient` (la ruta debe ser exactamente `C:\instantclient`).
+  3. Extrae el contenido del ZIP dentro de esta nueva carpeta. Asegúrate de que el archivo `oci.dll` esté visible en esa carpeta.
+  4. Ahora, debes agregar esta carpeta al `PATH` de Windows:
+     - Presiona la tecla **Windows** y busca: *"Editar las variables de entorno del sistema"*.
+     - Haz clic en el botón **"Variables de entorno..."**.
+     - En la sección **"Variables del sistema"** (abajo), busca la variable llamada `Path`, selecciónala y haz clic en **"Editar..."**.
+     - Haz clic en **"Nuevo"** y escribe: `C:\instantclient`
+     - Haz clic en Aceptar en todas las ventanas.
+  5. **Obligatorio:** Cierra todas las terminales y editores de código que tengas abiertos (VS Code, CMD, etc.) para que reconozcan el cambio.
 
-1. Descarga el **Basic Package (ZIP)** para Windows x64:  
-   https://www.oracle.com/database/technologies/instant-client/winx64-64-downloads.html
-2. Extrae el ZIP en `C:\instantclient` (la carpeta debe contener `oci.dll`).
-3. Agrega `C:\instantclient` a la variable de entorno **PATH** del usuario:
-   ```powershell
-   [Environment]::SetEnvironmentVariable("PATH", $env:PATH + ";C:\instantclient", "User")
-   ```
-4. Abre una **nueva terminal** para que tome el nuevo PATH.
-
-### 4. DBeaver (opcional, para gestionar la BD)
-- Descarga: https://dbeaver.io/download/
+### 5. DBeaver o SQL Developer (Administrador de Base de Datos)
+Herramienta visual para ejecutar los scripts SQL y crear las tablas.
+- **Nombre de la herramienta:** DBeaver Community Edition (Recomendado)
+- **Descarga:** https://dbeaver.io/download/
+- **Instalación:** Descarga el "Windows (installer)" y sigue los pasos por defecto.
 
 ---
 
-## 🗄️ Configuración de Oracle XE
+## 🗄️ Configuración de Oracle XE y Base de Datos
 
-### Crear el usuario y la base de datos
+Antes de correr el proyecto, debes crear la base de datos y sus tablas.
 
-Conéctate a Oracle como **SYSTEM** (desde SQL*Plus o DBeaver) y ejecuta:
+### Paso 1: Conectarse a la base de datos
+1. Abre DBeaver.
+2. Crea una nueva conexión seleccionando **Oracle**.
+3. En **Host** pon `localhost`. En **Database** o **Service Name** pon `XE`. En **Port** pon `1521`.
+4. En **Username** pon `system`.
+5. En **Password** pon la contraseña que creaste al instalar Oracle XE.
+6. Haz clic en "Finish" o "Test Connection".
+
+### Paso 2: Crear el usuario (esquema) del proyecto
+Abre un "SQL Editor" en DBeaver (conectado a `system`) y ejecuta esto, seleccionando todo el texto y presionando el botón de ejecutar:
 
 ```sql
--- Crear usuario del proyecto
+-- Crear usuario del proyecto. Si te da error de perfil, asegúrate de ser SYSTEM.
 CREATE USER PROYECTOBD IDENTIFIED BY tu_password;
 GRANT CONNECT, RESOURCE TO PROYECTOBD;
 GRANT CREATE SESSION TO PROYECTOBD;
 ALTER USER PROYECTOBD QUOTA UNLIMITED ON USERS;
 ```
+*(Puedes cambiar `tu_password` por una contraseña que prefieras, pero anótala).*
 
-### Crear las tablas
-
-Con el usuario `PROYECTOBD` conectado, ejecuta los scripts SQL del proyecto para crear las 13 tablas con sus secuencias y triggers.
-
-### Verificar la conexión
-
-```sql
--- Desde SYSTEM: verificar que PROYECTOBD existe
-SELECT USERNAME FROM DBA_USERS WHERE USERNAME = 'PROYECTOBD';
-```
+### Paso 3: Crear las tablas del sistema
+1. Desconéctate de `system` en DBeaver.
+2. Crea una **nueva conexión** en DBeaver a Oracle, pero esta vez usa **Username:** `PROYECTOBD` y **Password:** `tu_password` (el que pusiste en el paso anterior).
+3. Abre un nuevo "SQL Editor" con esta nueva conexión.
+4. Pega y ejecuta todos los scripts SQL provistos por tu equipo (Creación de tablas, secuencias, triggers e inserción de datos iniciales/catálogos).
 
 ---
 
-## 🚀 Instalación del proyecto
+## 🚀 Instalación del Proyecto Paso a Paso
 
-### 1. Clonar el repositorio
+Una vez que todas las herramientas están instaladas y la base de datos creada, prepara el backend:
 
+### 1. Clonar el código fuente
+Abre una terminal nueva (CMD, PowerShell o Git Bash) y ejecuta:
 ```bash
 git clone https://github.com/G2-BaseDeDatos/BACKEND_APP.git
+```
+
+### 2. Entrar a la carpeta del proyecto
+```bash
 cd BACKEND_APP
 ```
 
-### 2. Instalar dependencias
-
+### 3. Instalar las dependencias de Node.js
+Ejecuta el siguiente comando para que NPM descargue todas las librerías necesarias (como `express`, `oracledb`, `jsonwebtoken`, etc.):
 ```bash
 npm install
 ```
 
-Las dependencias principales son:
-
-| Paquete | Versión | Uso |
-|---|---|---|
-| `express` | ^5.x | Framework web |
-| `oracledb` | ^6.x | Driver Oracle |
-| `jsonwebtoken` | ^9.x | Autenticación JWT |
-| `bcryptjs` | ^2.x | Hash de contraseñas |
-| `express-validator` | ^7.x | Validación de inputs |
-| `dotenv` | ^17.x | Variables de entorno |
-| `cors` | ^2.x | Política de origen cruzado |
-| `nodemon` | ^3.x | Auto-recarga en desarrollo |
-
 ---
 
-## 🔐 Variables de entorno
+## 🔐 Variables de Entorno (.env)
 
-Crea un archivo `.env` en la raíz de `BACKEND_APP/` con este contenido:
+El proyecto necesita saber cómo conectarse a TU base de datos local. Esto se hace mediante un archivo oculto llamado `.env`.
+
+1. Abre la carpeta `BACKEND_APP` en **Visual Studio Code**.
+2. En la raíz del proyecto (al mismo nivel que `package.json`), crea un archivo nuevo y llámalo exactamente: `.env`
+3. Abre el archivo `.env` y pega exactamente lo siguiente:
 
 ```env
-# Servidor
+# Puerto donde correrá el servidor Backend
 PORT=3006
 
-# Oracle Database
+# Credenciales de tu Base de Datos Oracle local
 DB_USER=PROYECTOBD
 DB_PASSWORD=tu_password_aqui
 DB_CONNECT_STRING=localhost:1521/XE
 
-# JWT
-JWT_SECRET=cambia_esto_por_un_secreto_seguro
+# Seguridad JWT (No necesitas cambiar esto para desarrollo local)
+JWT_SECRET=super_secreto_para_gitt_app_backend_123
 JWT_EXPIRES_IN=8h
 ```
 
-> ⚠️ El archivo `.env` está en `.gitignore`. **Nunca lo subas al repositorio.**
+**⚠️ REVISIÓN CRÍTICA:** Asegúrate de cambiar `tu_password_aqui` por la contraseña que le pusiste al usuario `PROYECTOBD` en el paso 2 de la configuración de base de datos.
 
 ---
 
-## ▶️ Ejecutar el servidor
+## ▶️ Ejecutar el Servidor
 
-### Modo desarrollo (con auto-recarga)
-```bash
-npm run dev
-```
+¡Ya está todo listo! Vamos a prender la aplicación.
 
-### Modo producción
-```bash
-npm start
-```
+1. Asegúrate de estar dentro de la carpeta `BACKEND_APP` en tu terminal.
+2. Para prender el servidor en modo desarrollo (se actualiza solo si cambias el código), ejecuta:
+   ```bash
+   npm run dev
+   ```
 
 ### Salida esperada al iniciar
+Si hiciste todo correctamente (incluyendo lo del Instant Client y la Base de datos), verás esto en la consola:
 ```
 🔧 oracledb Thick mode activado (Instant Client 64-bit).
 ✅ Pool de conexiones Oracle inicializado.
 🚀 Backend GITT corriendo en http://localhost:3006
 ```
+
+**¿Te sale un error? Posibles soluciones:**
+- `NJS-045: cannot load a node-oracledb Thick mode...` 👉 El `PATH` del Instant Client está mal configurado o no reiniciaste la terminal.
+- `ORA-12541: TNS:no listener` o `ORA-12154` 👉 El servicio de Oracle XE está apagado. Ve a "Servicios" en Windows, busca `OracleServiceXE` y dale a Iniciar.
+- `ORA-01017: invalid username/password` 👉 Escribiste mal `DB_USER` o `DB_PASSWORD` en tu archivo `.env`.
 
 ---
 
