@@ -1,5 +1,6 @@
 const oracledb = require('oracledb');
 const { getConnection } = require('../Config/db');
+const MovimientoModel = require('./movimientoModel');
 
 class ArticuloModel {
   /**
@@ -125,9 +126,18 @@ class ArticuloModel {
           val_art: data.val_art,
           newId: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
         },
-        { autoCommit: true }
+        { autoCommit: false }
       );
-      return result.outBinds.newId[0];
+      const newId = result.outBinds.newId[0];
+
+      // Registrar movimiento
+      await MovimientoModel.create(newId, 'Ingreso al inventario', connection);
+
+      await connection.commit();
+      return newId;
+    } catch (err) {
+      if (connection) await connection.rollback();
+      throw err;
     } finally {
       if (connection) await connection.close();
     }
@@ -180,9 +190,42 @@ class ArticuloModel {
       const result = await connection.execute(
         `UPDATE ARTICULOS SET EST_ART = 'Baja' WHERE ID_ART = :id`,
         { id },
+        { autoCommit: false }
+      );
+      
+      // Registrar movimiento
+      await MovimientoModel.create(id, 'Dado de baja', connection);
+      
+      await connection.commit();
+      return result.rowsAffected;
+    } catch (err) {
+      if (connection) await connection.rollback();
+      throw err;
+    } finally {
+      if (connection) await connection.close();
+    }
+  }
+
+  /**
+   * Registra la URL de una imagen en la tabla IMAGENES_ART.
+   * Retorna el ID generado.
+   */
+  static async addImagen(id_art, url_ima) {
+    let connection;
+    try {
+      connection = await getConnection();
+      const result = await connection.execute(
+        `INSERT INTO IMAGENES_ART (ID_ART, URL_IMA)
+         VALUES (:id_art, :url_ima)
+         RETURNING ID_IMA INTO :newId`,
+        {
+          id_art,
+          url_ima,
+          newId: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+        },
         { autoCommit: true }
       );
-      return result.rowsAffected;
+      return result.outBinds.newId[0];
     } finally {
       if (connection) await connection.close();
     }

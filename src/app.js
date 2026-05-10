@@ -1,5 +1,6 @@
 const express = require('express');
 const cors    = require('cors');
+const path    = require('path');
 
 const errorHandler = require('./Middlewares/errorHandler');
 
@@ -12,17 +13,20 @@ const ubicacionesRoutes    = require('./Routes/ubicacionesRoutes');
 const usuariosRoutes       = require('./Routes/usuariosRoutes');
 const articulosRoutes      = require('./Routes/articulosRoutes');
 // const imagenesRoutes       = require('./Routes/imagenesRoutes');
-// const prestamosRoutes      = require('./Routes/prestamosRoutes');
-// const mantenimientosRoutes = require('./Routes/mantenimientosRoutes');
+const prestamosRoutes      = require('./Routes/prestamosRoutes');
+const mantenimientosRoutes = require('./Routes/mantenimientosRoutes');
 // const movimientosRoutes    = require('./Routes/movimientosRoutes');
-// const notificacionesRoutes = require('./Routes/notificacionesRoutes');
-// const auditoriasRoutes     = require('./Routes/auditoriasRoutes');
+const notificacionesRoutes = require('./Routes/notificacionesRoutes');
+const auditoriasRoutes     = require('./Routes/auditoriasRoutes');
 
 const app = express();
 
 // ── Middlewares globales ──────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
+
+// Servir la carpeta public/uploads de forma estática
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // ── Rutas de la API ───────────────────────────────────────────────────────────
 app.use('/api/auth',           authRoutes);          // público – sin JWT
@@ -33,11 +37,11 @@ app.use('/api/ubicaciones',    ubicacionesRoutes);
 app.use('/api/usuarios',       usuariosRoutes);
 app.use('/api/articulos',      articulosRoutes);
 // app.use('/api/imagenes',       imagenesRoutes);
-// app.use('/api/prestamos',      prestamosRoutes);
-// app.use('/api/mantenimientos', mantenimientosRoutes);
+app.use('/api/prestamos',      prestamosRoutes);
+app.use('/api/mantenimientos', mantenimientosRoutes);
 // app.use('/api/movimientos',    movimientosRoutes);
-// app.use('/api/notificaciones', notificacionesRoutes);
-// app.use('/api/auditorias',     auditoriasRoutes);
+app.use('/api/notificaciones', notificacionesRoutes);
+app.use('/api/auditorias',     auditoriasRoutes);
 
 // ── Health check (sin autenticación) ─────────────────────────────────────────
 app.get('/health', (req, res) => {
