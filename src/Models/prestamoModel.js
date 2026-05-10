@@ -43,6 +43,18 @@ class PrestamoModel {
         );
       }
 
+      // 3. Insertar notificación automática para el estudiante/docente
+      const mensaje = `Tienes un nuevo préstamo asignado. Debes devolverlo máximo el ${fpr_pre}.`;
+      await connection.execute(
+        `INSERT INTO NOTIFICACIONES (ID_PRE, MEN_NOT, EST_NOT)
+         VALUES (:id_pre, :men_not, 'Pendiente')`,
+        {
+          id_pre: newIdPre,
+          men_not: mensaje
+        },
+        { autoCommit: false }
+      );
+
       await connection.commit();
       return newIdPre;
     } catch (err) {

@@ -418,6 +418,16 @@ GET http://localhost:3006/api/articulos?responsable=1
 
 ---
 
+### 🔔 Notificaciones — `/api/notificaciones`
+> GET / PUT: **Todos (Administrador, Docente, Estudiante)**
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| GET | `/api/notificaciones/mis-notificaciones` | Listar las notificaciones del usuario logueado (incluye el detalle del préstamo) |
+| PUT | `/api/notificaciones/:id/leer` | Marcar una notificación específica como 'Leida' |
+
+---
+
 ### ✅ Health Check — sin autenticación
 
 ```http
