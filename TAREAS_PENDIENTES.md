@@ -35,10 +35,10 @@ Para tener el "historial de vida" de cada equipo. Esto le da sentido a la tabla 
 
 ## 5. 🔔 Módulo de Notificaciones
 Darle uso real a la comunicación del sistema para que los usuarios no tengan que adivinar.
-- [ ] **Crear `notificacionModel.js` y rutas**:
-- [ ] **Generación Automática**: Cuando un Docente/Administrador apruebe o asigne un préstamo, el backend insertará un registro en `NOTIFICACIONES` dirigido al Estudiante.
-- [ ] **Endpoint `GET /api/notificaciones/mis-notificaciones`**: Para que el usuario lea sus alertas (ej. "Tienes 1 día para devolver el proyector").
-- [ ] **Endpoint `PUT /api/notificaciones/:id/leer`**: Para marcar la alerta como leída.
+- [x] **Crear `notificacionModel.js` y rutas**:
+- [x] **Generación Automática**: Cuando un Docente/Administrador apruebe o asigne un préstamo, el backend insertará un registro en `NOTIFICACIONES` dirigido al Estudiante.
+- [x] **Endpoint `GET /api/notificaciones/mis-notificaciones`**: Para que el usuario lea sus alertas (ej. "Tienes 1 día para devolver el proyector").
+- [x] **Endpoint `PUT /api/notificaciones/:id/leer`**: Para marcar la alerta como leída.
 
 ## 6. 🛡️ Módulo de Auditorías (Seguridad)
 Obligatorio en sistemas de información serios. Si un Administrador da de baja un equipo costoso, debe quedar un rastro inborrable.
