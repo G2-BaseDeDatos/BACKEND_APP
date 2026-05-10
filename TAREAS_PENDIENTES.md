@@ -22,7 +22,7 @@ Toda la lógica de asignar equipos a usuarios y gestionar sus devoluciones.
 
 ## 3. 🛠️ Módulo de Mantenimientos
 Para controlar los equipos que entran a reparación.
-- [ ] **Crear `mantenimientoModel.js`, controller y rutas**:
+- [x] **Crear `mantenimientoModel.js`, controller y rutas**:
   - `POST /api/mantenimientos`: Registrar el envío a reparación (debe cambiar el estado del artículo a "Mantenimiento").
   - `PUT /api/mantenimientos/:id/finalizar`: Registrar que el equipo fue reparado (volver artículo a "Disponible") y guardar notas técnicas o costos.
   - `GET /api/mantenimientos`: Listar todos los equipos que actualmente se encuentran en reparación.

@@ -389,6 +389,35 @@ GET http://localhost:3006/api/articulos?responsable=1
 
 ---
 
+### 🛠️ Mantenimientos — `/api/mantenimientos`
+> GET / POST / PUT: **Administrador, Docente**
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| GET | `/api/mantenimientos` | Listar equipos actualmente en reparación (Mantenimiento) |
+| POST | `/api/mantenimientos` | Enviar equipo a reparación (Preventivo/Correctivo) |
+| PUT | `/api/mantenimientos/:id/finalizar` | Finalizar reparación y devolver estado a Disponible |
+
+**Body para POST (Enviar a reparación):**
+```json
+{
+  "id_art": 1,
+  "tip_man": "Correctivo",
+  "fec_man": "2026-05-10",
+  "des_man": "Cambio de disco duro por daño físico"
+}
+```
+
+**Body para PUT (Finalizar reparación):**
+```json
+{
+  "id_art": 1,
+  "notas_adicionales": "Se instaló un SSD de 1TB marca Kingston. Costo $50."
+}
+```
+
+---
+
 ### ✅ Health Check — sin autenticación
 
 ```http
