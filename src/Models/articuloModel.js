@@ -187,31 +187,6 @@ class ArticuloModel {
       if (connection) await connection.close();
     }
   }
-
-  /**
-   * Registra la URL de una imagen en la tabla IMAGENES_ART.
-   * Retorna el ID generado.
-   */
-  static async addImagen(id_art, url_ima) {
-    let connection;
-    try {
-      connection = await getConnection();
-      const result = await connection.execute(
-        `INSERT INTO IMAGENES_ART (ID_ART, URL_IMA)
-         VALUES (:id_art, :url_ima)
-         RETURNING ID_IMA INTO :newId`,
-        {
-          id_art,
-          url_ima,
-          newId: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
-        },
-        { autoCommit: true }
-      );
-      return result.outBinds.newId[0];
-    } finally {
-      if (connection) await connection.close();
-    }
-  }
 }
 
 module.exports = ArticuloModel;
