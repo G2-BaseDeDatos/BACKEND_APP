@@ -1,5 +1,6 @@
 const oracledb = require('oracledb');
 const { getConnection } = require('../Config/db');
+const MovimientoModel = require('./movimientoModel');
 
 class PrestamoModel {
   /**
@@ -41,6 +42,9 @@ class PrestamoModel {
           },
           { autoCommit: false }
         );
+        
+        // Registrar movimiento
+        await MovimientoModel.create(id_art, `Prestado a usuario ID ${id_usu}`, connection);
       }
 
       // 3. Insertar notificación automática para el estudiante/docente
@@ -89,9 +93,23 @@ class PrestamoModel {
       const result = await connection.execute(
         `UPDATE PRESTAMOS SET EST_PRE = 'Devuelto' WHERE ID_PRE = :id_pre`,
         { id_pre },
-        { autoCommit: true }
+        { autoCommit: false }
       );
+      
+      // Consultamos los articulos de este prestamo para registrarlos como devueltos
+      const detResult = await connection.execute(
+        `SELECT ID_ART FROM DETALLE_PRESTAMOS WHERE ID_PRE = :id_pre`,
+        { id_pre }
+      );
+      for (const row of detResult.rows) {
+        await MovimientoModel.create(row[0], 'Devuelto de préstamo', connection);
+      }
+
+      await connection.commit();
       return result.rowsAffected;
+    } catch (err) {
+      if (connection) await connection.rollback();
+      throw err;
     } finally {
       if (connection) await connection.close();
     }

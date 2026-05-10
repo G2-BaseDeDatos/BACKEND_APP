@@ -1,5 +1,6 @@
 const oracledb = require('oracledb');
 const { getConnection } = require('../Config/db');
+const MovimientoModel = require('./movimientoModel');
 
 class MantenimientoModel {
   /**
@@ -35,6 +36,8 @@ class MantenimientoModel {
         { id_art },
         { autoCommit: false }
       );
+      // 3. Registrar movimiento
+      await MovimientoModel.create(id_art, `Enviado a mantenimiento (${tip_man})`, connection);
 
       // Confirmar transacción
       await connection.commit();
@@ -79,6 +82,9 @@ class MantenimientoModel {
         { id_art },
         { autoCommit: false }
       );
+
+      // Registrar movimiento
+      await MovimientoModel.create(id_art, 'Mantenimiento finalizado', connection);
 
       await connection.commit();
       return result.rowsAffected;

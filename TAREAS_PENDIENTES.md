@@ -29,9 +29,9 @@ Para controlar los equipos que entran a reparación.
 
 ## 4. 📝 Módulo de Movimientos (Trazabilidad)
 Para tener el "historial de vida" de cada equipo. Esto le da sentido a la tabla de Movimientos, permitiendo saber por cuántas manos ha pasado una laptop antes de dañarse.
-- [ ] **Crear `movimientoModel.js`**: Consultas para insertar movimientos.
-- [ ] **Conexión con otros módulos**: Cada vez que se haga un Préstamo, Devolución o Mantenimiento, el backend debe insertar automáticamente un registro en `MOVIMIENTOS`.
-- [ ] **Endpoint `GET /api/articulos/:id/movimientos`**: Un endpoint para que el Administrador vea la línea de tiempo completa de un equipo.
+- [x] **Crear `movimientoModel.js`**: Consultas para insertar movimientos.
+- [x] **Conexión con otros módulos**: Cada vez que se haga un Préstamo, Devolución o Mantenimiento, el backend debe insertar automáticamente un registro en `MOVIMIENTOS`.
+- [x] **Endpoint `GET /api/articulos/:id/movimientos`**: Un endpoint para que el Administrador vea la línea de tiempo completa de un equipo.
 
 ## 5. 🔔 Módulo de Notificaciones
 Darle uso real a la comunicación del sistema para que los usuarios no tengan que adivinar.

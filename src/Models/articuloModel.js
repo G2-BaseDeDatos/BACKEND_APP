@@ -1,5 +1,6 @@
 const oracledb = require('oracledb');
 const { getConnection } = require('../Config/db');
+const MovimientoModel = require('./movimientoModel');
 
 class ArticuloModel {
   /**
@@ -125,9 +126,18 @@ class ArticuloModel {
           val_art: data.val_art,
           newId: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
         },
-        { autoCommit: true }
+        { autoCommit: false }
       );
-      return result.outBinds.newId[0];
+      const newId = result.outBinds.newId[0];
+
+      // Registrar movimiento
+      await MovimientoModel.create(newId, 'Ingreso al inventario', connection);
+
+      await connection.commit();
+      return newId;
+    } catch (err) {
+      if (connection) await connection.rollback();
+      throw err;
     } finally {
       if (connection) await connection.close();
     }
@@ -180,9 +190,17 @@ class ArticuloModel {
       const result = await connection.execute(
         `UPDATE ARTICULOS SET EST_ART = 'Baja' WHERE ID_ART = :id`,
         { id },
-        { autoCommit: true }
+        { autoCommit: false }
       );
+      
+      // Registrar movimiento
+      await MovimientoModel.create(id, 'Dado de baja', connection);
+      
+      await connection.commit();
       return result.rowsAffected;
+    } catch (err) {
+      if (connection) await connection.rollback();
+      throw err;
     } finally {
       if (connection) await connection.close();
     }

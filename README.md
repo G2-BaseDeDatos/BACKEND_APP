@@ -333,6 +333,7 @@ Authorization: Bearer <token>
 | GET | `/api/articulos` | Listar artículos (con filtros opcionales) |
 | GET | `/api/articulos/:id` | Obtener artículo por ID (incluye imágenes) |
 | GET | `/api/articulos/estado/:est` | Filtrar por estado |
+| GET | `/api/articulos/:id/movimientos` | Ver historial de movimientos (trazabilidad) del artículo |
 | POST | `/api/articulos` | Registrar nuevo artículo |
 | POST | `/api/articulos/:id/imagen` | Subir una imagen física y enlazarla al artículo |
 | PUT | `/api/articulos/:id` | Actualizar artículo |
