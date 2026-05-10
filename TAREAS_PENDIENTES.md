@@ -22,16 +22,31 @@ Toda la lógica de asignar equipos a usuarios y gestionar sus devoluciones.
 
 ## 3. 🛠️ Módulo de Mantenimientos
 Para controlar los equipos que entran a reparación.
-- [ ] **Crear `mantenimientoModel.js`, controller y rutas**:
+- [x] **Crear `mantenimientoModel.js`, controller y rutas**:
   - `POST /api/mantenimientos`: Registrar el envío a reparación (debe cambiar el estado del artículo a "Mantenimiento").
   - `PUT /api/mantenimientos/:id/finalizar`: Registrar que el equipo fue reparado (volver artículo a "Disponible") y guardar notas técnicas o costos.
   - `GET /api/mantenimientos`: Listar todos los equipos que actualmente se encuentran en reparación.
 
-## 4. 📝 Historial / Trazabilidad (Opcional)
-- [ ] **Registrar Movimientos**: Programar un trigger o función que registre cada cambio de estado.
-- [ ] **Endpoint de Historial**: `GET /api/articulos/:id/historial` para ver la línea de tiempo de un equipo.
+## 4. 📝 Módulo de Movimientos (Trazabilidad)
+Para tener el "historial de vida" de cada equipo. Esto le da sentido a la tabla de Movimientos, permitiendo saber por cuántas manos ha pasado una laptop antes de dañarse.
+- [ ] **Crear `movimientoModel.js`**: Consultas para insertar movimientos.
+- [ ] **Conexión con otros módulos**: Cada vez que se haga un Préstamo, Devolución o Mantenimiento, el backend debe insertar automáticamente un registro en `MOVIMIENTOS`.
+- [ ] **Endpoint `GET /api/articulos/:id/movimientos`**: Un endpoint para que el Administrador vea la línea de tiempo completa de un equipo.
 
-## 5. 🛡️ Validación de Datos en Backend (Express-Validator)
+## 5. 🔔 Módulo de Notificaciones
+Darle uso real a la comunicación del sistema para que los usuarios no tengan que adivinar.
+- [ ] **Crear `notificacionModel.js` y rutas**:
+- [ ] **Generación Automática**: Cuando un Docente/Administrador apruebe o asigne un préstamo, el backend insertará un registro en `NOTIFICACIONES` dirigido al Estudiante.
+- [ ] **Endpoint `GET /api/notificaciones/mis-notificaciones`**: Para que el usuario lea sus alertas (ej. "Tienes 1 día para devolver el proyector").
+- [ ] **Endpoint `PUT /api/notificaciones/:id/leer`**: Para marcar la alerta como leída.
+
+## 6. 🛡️ Módulo de Auditorías (Seguridad)
+Obligatorio en sistemas de información serios. Si un Administrador da de baja un equipo costoso, debe quedar un rastro inborrable.
+- [ ] **Crear `auditoriaModel.js`**:
+- [ ] **Middleware de Auditoría Automática**: Crear un middleware que intercepte peticiones sensibles (como `DELETE /api/articulos/:id` o la creación de usuarios) y guarde automáticamente en `AUDITORIAS` quién lo hizo (ID del usuario), a qué hora, desde qué IP y qué acción realizó.
+- [ ] **Endpoint `GET /api/auditorias`**: Solo para uso del Administrador principal.
+
+## 7. 🛡️ Validación de Datos en Backend (Express-Validator)
 El backend debe tener las mismas validaciones que configuraste en los `ALTER TABLE` para rechazar datos incorrectos antes de que lleguen a Oracle:
 - [x] **Validar Usuarios (`usuariosRoutes.js`)**:
   - `ced_usu`: Debe ser string numérico de exactamente 10 caracteres.
@@ -40,7 +55,7 @@ El backend debe tener las mismas validaciones que configuraste en los `ALTER TAB
     - **Docentes:** `{PrimeraLetraNombre}{Apellido}@uta.edu.ec` (Ej: Matias Morales → `mmorales@uta.edu.ec`).
   - `nom_usu`: Solo letras y espacios, mínimo 3 caracteres.
   - `pas_usu`: Mínimo 8 caracteres.
-- [ ] **Validar Artículos (`articulosRoutes.js`)**:
+- [x] **Validar Artículos (`articulosRoutes.js`)**:
   - `val_art`: Debe ser un número `>= 0` (no negativo).
 - [x] **Validar Préstamos (`prestamosRoutes.js`)**:
   - La fecha prevista de retorno (`FPR_PRE`) debe ser estrictamente mayor a la fecha de salida (`FSA_PRE`).
