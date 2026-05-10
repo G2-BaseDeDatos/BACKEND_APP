@@ -12,13 +12,13 @@ Actualmente, el código asume que existe una tabla de imágenes, pero no hay for
 
 ## 2. 🤝 Módulo de Préstamos (Core del Sistema)
 Toda la lógica de asignar equipos a usuarios y gestionar sus devoluciones.
-- [ ] **Crear `prestamoModel.js`**: Consultas SQL para insertar a `PRESTAMOS` y `DETALLE_PRESTAMOS`.
-- [ ] **Endpoints a crear (`prestamosController.js` y `prestamosRoutes.js`)**:
+- [x] **Crear `prestamoModel.js`**: Consultas SQL para insertar a `PRESTAMOS` y `DETALLE_PRESTAMOS`.
+- [x] **Endpoints a crear (`prestamosController.js` y `prestamosRoutes.js`)**:
   - `POST /api/prestamos`: Crear un préstamo. *(Nota: ¡La BD ya cambia el estado del artículo a "Prestado" gracias al trigger `TRG_ACTUALIZAR_ESTADO_ARTICULO`! El backend solo debe insertar el registro)*.
   - `PUT /api/prestamos/:id/devolucion`: Actualizar el `EST_PRE` a 'Devuelto' (el trigger de BD se encarga de liberar los artículos a 'Disponible').
   - `GET /api/prestamos/mis-prestamos`: Para que un Estudiante/Docente vea sus equipos actuales.
   - `GET /api/prestamos`: Listado global de préstamos.
-- [ ] **Capturar Errores de Triggers**: El backend debe estar preparado para capturar el error `ORA-20001` (cuando un artículo ya está en un préstamo activo según `TRG_ARTICULO_UNICO_PRESTAMO`) y devolver un mensaje amigable `400 Bad Request` al cliente.
+- [x] **Capturar Errores de Triggers**: El backend debe estar preparado para capturar el error `ORA-20001` (cuando un artículo ya está en un préstamo activo según `TRG_ARTICULO_UNICO_PRESTAMO`) y devolver un mensaje amigable `400 Bad Request` al cliente.
 
 ## 3. 🛠️ Módulo de Mantenimientos
 Para controlar los equipos que entran a reparación.
@@ -42,8 +42,8 @@ El backend debe tener las mismas validaciones que configuraste en los `ALTER TAB
   - `pas_usu`: Mínimo 8 caracteres.
 - [ ] **Validar Artículos (`articulosRoutes.js`)**:
   - `val_art`: Debe ser un número `>= 0` (no negativo).
-- [ ] **Validar Préstamos (`prestamosRoutes.js`)**:
+- [x] **Validar Préstamos (`prestamosRoutes.js`)**:
   - La fecha prevista de retorno (`FPR_PRE`) debe ser estrictamente mayor a la fecha de salida (`FSA_PRE`).
 
 ## 6. 🔒 Validación de Roles en Rutas Nuevas
-- [ ] **Aplicar Middleware `roleAuth`**: Proteger las rutas de Préstamos y Mantenimientos según el rol (Administrador, Docente, Estudiante).
+- [x] **Aplicar Middleware `roleAuth`**: Proteger las rutas de Préstamos y Mantenimientos según el rol (Administrador, Docente, Estudiante).

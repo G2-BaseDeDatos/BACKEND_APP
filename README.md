@@ -366,6 +366,28 @@ GET http://localhost:3006/api/articulos?responsable=1
 
 ---
 
+### 🤝 Préstamos — `/api/prestamos`
+> GET mis-prestamos: todos · GET/POST/PUT: **Administrador, Docente**
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| GET | `/api/prestamos/mis-prestamos` | Ver equipos prestados al usuario autenticado |
+| GET | `/api/prestamos` | Listado global de todos los préstamos |
+| POST | `/api/prestamos` | Crear un préstamo (asigna artículos) |
+| PUT | `/api/prestamos/:id/devolucion` | Registrar devolución (libera artículos) |
+
+**Body para POST (Crear Préstamo):**
+```json
+{
+  "id_usu": 1,
+  "fsa_pre": "2026-05-10",
+  "fpr_pre": "2026-05-15",
+  "articulos_ids": [1, 2]
+}
+```
+
+---
+
 ### ✅ Health Check — sin autenticación
 
 ```http
