@@ -6,9 +6,9 @@ Este documento detalla las funcionalidades de negocio que faltan por implementar
 
 ## 1. 🖼️ Módulo de Imágenes (Subida de Archivos)
 Actualmente, el código asume que existe una tabla de imágenes, pero no hay forma de subirlas desde el frontend.
-- [ ] **Instalar y configurar `multer`**: Configurar el backend para que pueda recibir archivos físicos (`multipart/form-data`).
-- [ ] **Crear Endpoint de Subida**: Programar `POST /api/articulos/:id/imagen`. Debe guardar la imagen en el servidor (ej. en una carpeta `public/uploads`) y registrar la URL generada en la base de datos (en la tabla `IMAGENES_ART` o directamente en `ARTICULOS`).
-- [ ] **Corregir Consulta Actual**: Revisar `articuloModel.js` (`findById`) para asegurarse de que la consulta a `IMAGENES_ART` coincida con cómo guardarán finalmente las imágenes, evitando caídas del servidor.
+- [x] **Instalar y configurar `multer`**: Configurar el backend para que pueda recibir archivos físicos (`multipart/form-data`).
+- [x] **Crear Endpoint de Subida**: Programar `POST /api/articulos/:id/imagen`. Debe guardar la imagen en el servidor (ej. en una carpeta `public/uploads`) y registrar la URL generada en la base de datos (en la tabla `IMAGENES_ART` o directamente en `ARTICULOS`).
+- [x] **Corregir Consulta Actual**: Revisar `articuloModel.js` (`findById`) para asegurarse de que la consulta a `IMAGENES_ART` coincida con cómo guardarán finalmente las imágenes, evitando caídas del servidor.
 
 ## 2. 🤝 Módulo de Préstamos (Core del Sistema)
 Toda la lógica de asignar equipos a usuarios y gestionar sus devoluciones.

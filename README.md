@@ -334,6 +334,7 @@ Authorization: Bearer <token>
 | GET | `/api/articulos/:id` | Obtener artículo por ID (incluye imágenes) |
 | GET | `/api/articulos/estado/:est` | Filtrar por estado |
 | POST | `/api/articulos` | Registrar nuevo artículo |
+| POST | `/api/articulos/:id/imagen` | Subir una imagen física y enlazarla al artículo |
 | PUT | `/api/articulos/:id` | Actualizar artículo |
 | DELETE | `/api/articulos/:id` | Dar de baja (cambia estado a "Baja") |
 

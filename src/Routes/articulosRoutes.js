@@ -3,6 +3,7 @@ const router               = express.Router();
 const { body }             = require('express-validator');
 const articulosController  = require('../Controllers/articulosController');
 const roleAuth             = require('../Middlewares/roleAuth');
+const uploadImage          = require('../Middlewares/uploadImage');
 
 const TODOS      = ['Administrador', 'Docente', 'Estudiante'];
 const SOLO_ADMIN = ['Administrador'];
@@ -39,5 +40,8 @@ router.put('/:id',          roleAuth(SOLO_ADMIN), validarArticulo, articulosCont
 
 // DELETE /api/articulos/:id        → solo Admin (baja lógica)
 router.delete('/:id',       roleAuth(SOLO_ADMIN), articulosController.remove);
+
+// POST /api/articulos/:id/imagen   → solo Admin (subir imagen)
+router.post('/:id/imagen',  roleAuth(SOLO_ADMIN), uploadImage.single('imagen'), articulosController.uploadImagen);
 
 module.exports = router;
