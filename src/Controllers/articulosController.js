@@ -1,6 +1,6 @@
-const ArticuloModel              = require('../Models/articuloModel');
+const ArticuloModel = require('../Models/articuloModel');
 const { sendSuccess, sendError } = require('../Utils/responseHelper');
-const { validationResult }       = require('express-validator');
+const { validationResult } = require('express-validator');
 
 const articulosController = {
   /**
@@ -117,6 +117,38 @@ const articulosController = {
       next(err);
     }
   },
-};
 
-module.exports = articulosController;
+    /**
+     * POST /api/articulos/:id/imagen
+     * Sube una imagen y registra su URL en la base de datos
+     * Acceso: Administrador
+     */
+    uploadImagen: async (req, res, next) => {
+      try {
+        if (!req.file) {
+          return sendError(res, 'No se proporcionó ningún archivo de imagen válido', 400);
+        }
+
+        const id_art = parseInt(req.params.id, 10);
+        if (isNaN(id_art)) return sendError(res, 'El ID del artículo debe ser un número válido', 400);
+
+        // Generar URL pública
+        const url_ima = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+
+        // Guardar en Oracle
+        const newId = await ArticuloModel.addImagen(id_art, url_ima);
+
+        sendSuccess(res, { id_ima: newId, url_ima }, 'Imagen subida y enlazada correctamente', 201);
+      } catch (err) {
+        // Si la base de datos lanza error de integridad (artículo no existe, etc)
+        if (err.message && err.message.includes('ORA-02291')) {
+          return sendError(res, 'El artículo especificado no existe', 404);
+        }
+        next(err);
+      }
+    }
+  };
+
+
+  module.exports = articulosController;
+

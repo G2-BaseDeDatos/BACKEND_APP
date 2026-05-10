@@ -1,5 +1,6 @@
 const express = require('express');
 const cors    = require('cors');
+const path    = require('path');
 
 const errorHandler = require('./Middlewares/errorHandler');
 
@@ -23,6 +24,9 @@ const app = express();
 // ── Middlewares globales ──────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
+
+// Servir la carpeta public/uploads de forma estática
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // ── Rutas de la API ───────────────────────────────────────────────────────────
 app.use('/api/auth',           authRoutes);          // público – sin JWT
