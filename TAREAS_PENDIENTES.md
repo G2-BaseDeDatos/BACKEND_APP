@@ -33,7 +33,7 @@ Para controlar los equipos que entran a reparación.
 
 ## 5. 🛡️ Validación de Datos en Backend (Express-Validator)
 El backend debe tener las mismas validaciones que configuraste en los `ALTER TABLE` para rechazar datos incorrectos antes de que lleguen a Oracle:
-- [ ] **Validar Usuarios (`usuariosRoutes.js`)**:
+- [x] **Validar Usuarios (`usuariosRoutes.js`)**:
   - `ced_usu`: Debe ser string numérico de exactamente 10 caracteres.
   - `cor_usu`: Debe ser estrictamente de la universidad (`@uta.edu.ec`). Tienen que programar un **custom validator** que verifique la estructura según el rol:
     - **Estudiantes:** `{PrimeraLetraNombre}{Apellido}{Últimos4Cédula}@uta.edu.ec` (Ej: Cristian Ango con cédula 155000**7999** → `cango7999@uta.edu.ec`).
