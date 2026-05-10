@@ -429,6 +429,15 @@ GET http://localhost:3006/api/articulos?responsable=1
 
 ---
 
+### 🛡️ Auditorías (Seguridad) — `/api/auditorias`
+> GET: **Solo Administrador**
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| GET | `/api/auditorias` | Listar el registro inalterable de acciones sensibles realizadas en el sistema (ej. altas y bajas) |
+
+---
+
 ### ✅ Health Check — sin autenticación
 
 ```http

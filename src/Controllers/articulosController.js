@@ -1,4 +1,5 @@
 const ArticuloModel = require('../Models/articuloModel');
+const AuditoriaModel = require('../Models/auditoriaModel');
 const { sendSuccess, sendError } = require('../Utils/responseHelper');
 const { validationResult } = require('express-validator');
 
@@ -110,9 +111,15 @@ const articulosController = {
       if (isNaN(id)) return sendError(res, 'El ID debe ser un número válido', 400);
 
       const filas = await ArticuloModel.darDeBaja(id);
-      if (filas === 0) return sendError(res, `Artículo con ID ${id} no encontrado`, 404);
+      if (filas === 0) return sendError(res, 'Artículo no encontrado', 404);
 
-      sendSuccess(res, { id_art: id }, 'Artículo dado de baja correctamente');
+      // --- AUDITORÍA ---
+      await AuditoriaModel.create(
+        req.usuario.id_usu, 
+        `El administrador dio de baja el artículo con ID: ${id}`
+      );
+
+      sendSuccess(res, null, 'Artículo dado de baja correctamente');
     } catch (err) {
       next(err);
     }

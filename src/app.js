@@ -17,7 +17,7 @@ const prestamosRoutes      = require('./Routes/prestamosRoutes');
 const mantenimientosRoutes = require('./Routes/mantenimientosRoutes');
 // const movimientosRoutes    = require('./Routes/movimientosRoutes');
 const notificacionesRoutes = require('./Routes/notificacionesRoutes');
-// const auditoriasRoutes     = require('./Routes/auditoriasRoutes');
+const auditoriasRoutes     = require('./Routes/auditoriasRoutes');
 
 const app = express();
 
@@ -41,7 +41,7 @@ app.use('/api/prestamos',      prestamosRoutes);
 app.use('/api/mantenimientos', mantenimientosRoutes);
 // app.use('/api/movimientos',    movimientosRoutes);
 app.use('/api/notificaciones', notificacionesRoutes);
-// app.use('/api/auditorias',     auditoriasRoutes);
+app.use('/api/auditorias',     auditoriasRoutes);
 
 // ── Health check (sin autenticación) ─────────────────────────────────────────
 app.get('/health', (req, res) => {

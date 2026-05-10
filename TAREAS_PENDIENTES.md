@@ -42,9 +42,9 @@ Darle uso real a la comunicación del sistema para que los usuarios no tengan qu
 
 ## 6. 🛡️ Módulo de Auditorías (Seguridad)
 Obligatorio en sistemas de información serios. Si un Administrador da de baja un equipo costoso, debe quedar un rastro inborrable.
-- [ ] **Crear `auditoriaModel.js`**:
-- [ ] **Middleware de Auditoría Automática**: Crear un middleware que intercepte peticiones sensibles (como `DELETE /api/articulos/:id` o la creación de usuarios) y guarde automáticamente en `AUDITORIAS` quién lo hizo (ID del usuario), a qué hora, desde qué IP y qué acción realizó.
-- [ ] **Endpoint `GET /api/auditorias`**: Solo para uso del Administrador principal.
+- [x] **Crear middleware o `auditoriaModel.js`**.
+- [x] **Interceptar Acciones Sensibles**: Si alguien llama a `DELETE /api/articulos/:id` o a `POST /api/usuarios`, insertar un log en la tabla `AUDITORIAS` con su `ID_USU` y qué hizo.
+- [x] **Endpoint `GET /api/auditorias`**: Para que el rector o super-admin pueda ver los logs inalterables.
 
 ## 7. 🛡️ Validación de Datos en Backend (Express-Validator)
 El backend debe tener las mismas validaciones que configuraste en los `ALTER TABLE` para rechazar datos incorrectos antes de que lleguen a Oracle:

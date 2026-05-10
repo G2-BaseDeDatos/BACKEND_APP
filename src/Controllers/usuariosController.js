@@ -1,4 +1,5 @@
 const UsuarioModel = require('../Models/usuarioModel');
+const AuditoriaModel = require('../Models/auditoriaModel');
 const { sendSuccess, sendError } = require('../Utils/responseHelper');
 const { validationResult } = require('express-validator');
 
@@ -47,6 +48,9 @@ const usuariosController = {
 
     try {
       const newId = await UsuarioModel.create(req.body);
+      
+      await AuditoriaModel.create(req.usuario.id_usu, `Creó el usuario con ID: ${newId} (${req.body.nom_usu})`);
+      
       sendSuccess(res, { id_usu: newId }, 'Usuario creado correctamente', 201);
     } catch (err) {
       // ORA-00001: cédula o correo duplicado (unique constraint)
@@ -74,6 +78,8 @@ const usuariosController = {
       const filas = await UsuarioModel.update(id, req.body);
       if (filas === 0) return sendError(res, `Usuario con ID ${id} no encontrado`, 404);
 
+      await AuditoriaModel.create(req.usuario.id_usu, `Actualizó datos del usuario con ID: ${id}`);
+
       sendSuccess(res, { id_usu: id }, 'Usuario actualizado correctamente');
     } catch (err) {
       if (err.message && err.message.includes('ORA-00001')) {
@@ -94,6 +100,8 @@ const usuariosController = {
 
       const filas = await UsuarioModel.remove(id);
       if (filas === 0) return sendError(res, `Usuario con ID ${id} no encontrado`, 404);
+
+      await AuditoriaModel.create(req.usuario.id_usu, `Eliminó permanentemente al usuario con ID: ${id}`);
 
       sendSuccess(res, { id_usu: id }, 'Usuario eliminado correctamente');
     } catch (err) {
